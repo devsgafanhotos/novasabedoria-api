@@ -1,0 +1,83 @@
+{
+    "Sucesso (2xx)": [
+        {
+            "200 OK": "Requisição bem-sucedida.",
+            "Exemplo": "listar dados (GET /users)."
+        },
+
+        {
+            "201 Created": "Recurso criado com sucesso.",
+            "Exemplo": "criar um usuário (POST /users)."
+        },
+
+        {
+            "202 Accepted": "A requisição foi aceita, mas será processada depois.",
+            "Exemplo": "envio de e-mail ou fila de processamento."
+        },
+
+        {
+            "204 No Content": "Requisição concluída, mas sem corpo de resposta.",
+            "Exemplo": "deletar (DELETE /users/:id)."
+        }
+    ],
+    "Erros do Cliente (4xx)": [
+        {
+            "400 Bad Request": "Erro de validação ou parâmetros inválidos.",
+            "Exemplo": "enviar um campo vazio obrigatório."
+        },
+
+        {
+            "401 Unauthorized": "Falta autenticação ou token inválido.",
+            "Exemplo": "usuário não logado tentando acessar /profile."
+        },
+
+        {
+            "403 Forbidden": "Usuário autenticado, mas sem permissão.",
+            "Exemplo": "tentar acessar recurso de administrador sendo usuário comum."
+        },
+
+        {
+            "404 Not Found": "Recurso não encontrado.",
+            "Exemplo": "GET /users/9999 e não existe."
+        },
+
+        {
+            "409 Conflict": "Conflito na requisição.",
+            "Exemplo": "tentar cadastrar um e-mail já existente."
+        },
+
+        {
+            "422 Unprocessable Entity": "Dados bem formatados, mas inválidos para o contexto.",
+            "Exemplo": "senha muito curta, embora o JSON esteja correto."
+        }
+    ],
+    "Erros do Servidor (5xx)": [
+        {
+            "500 Internal Server Error": " Erro inesperado no servidor.",
+            "Exemplo": "exceção não tratada."
+        },
+
+        { "502 Bad Gateway": " Erro na comunicação entre serviços." },
+
+        { "503 Service Unavailable": " API fora do ar ou sobrecarregada." },
+
+        { "504 Gateway Timeout": " O servidor demorou muito para responder." }
+    ],
+    "response": [
+        {
+            "status": "Código HTTP : Number",
+            "success": "Booleano: true/false",
+            "message": "String: Descrição legível para o front",
+            "data": ["Resultado quando sucesso", "Object"],
+            "errors": [
+                "Lista de erros (quando aplicável)",
+                { "field": "attribute", "message": "String" },
+                "Exemplo",
+                { "field": "password", "message": "Senha incorreta" }
+            ],
+            "meta": {
+                "Info extra ": "(quando necessário)"
+            }
+        }
+    ]
+}
