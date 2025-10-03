@@ -70,10 +70,7 @@
             "message": "String: Descrição legível para o front",
             "data": ["Resultado quando sucesso", "Object"],
             "errors": [
-                "Lista de erros (quando aplicável)",
-                { "field": "attribute", "message": "String" },
-                "Exemplo",
-                { "field": "password", "message": "Senha incorreta" }
+                "Lista de erros (quando aplicável)"
             ],
             "meta": {
                 "Info extra ": "(quando necessário)"

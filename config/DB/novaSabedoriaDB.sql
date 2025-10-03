@@ -115,7 +115,7 @@ CREATE TABLE
         id_funcionario integer (10),
         id_funcionario_pago integer (10),
         foreign key (id_funcionario) references funcionario (id),
-        foreign key (id_funcionarioPago) references funcionario (id)
+        foreign key (id_funcionario_pago) references funcionario (id)
     );
 
 CREATE TABLE
@@ -182,7 +182,7 @@ CREATE TABLE
         id_aluno integer (10),
         id_turma INTEGER (10),
         id_matricula INTEGER (10),
-        foreign key (id_aluno) references aluno (id)
+        foreign key (id_aluno) references aluno (id),
         foreign key (id_turma) references turma (id),
         foreign key (id_matricula) references matricula (id)
     );
