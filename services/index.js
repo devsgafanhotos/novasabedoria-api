@@ -3,4 +3,14 @@
  */
 const planoServices = require("./plano");
 
-module.exports = { planoServices };
+/**
+ * @description IMPORTAÇÃO DO MODULO DE SERVIÇO DE DEPARTAMENTOS
+ */
+const departamentoServices = require("./departamento");
+
+/**
+ * @description IMPORTAÇÃO DO MODULO DE SERVIÇO DE funcaoS
+ */
+const funcaoServices = require("./funcao");
+
+module.exports = { planoServices, departamentoServices, funcaoServices };

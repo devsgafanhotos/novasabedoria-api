@@ -21,7 +21,7 @@ planoRouter.delete("/deletar", planoControllers.deletarPlano);
 
 /**
  * @description ROTA QUE RETORNA UM PLANO ESPECÍFICO
- * @route /perfil?id=id
+ * @route /plano/perfil?id=id
  */
 planoRouter.get("/perfil", planoControllers.perfilPlano);
 

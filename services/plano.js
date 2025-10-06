@@ -1,10 +1,10 @@
 const { Op, where, col } = require("sequelize");
 
 // IMPORTAÇÃO DO MODEL DE ITERAÇÃO COM A TABELA PLANO DO BANCO DE DADOS
-const { plano: planoModel } = require("../config/database").conectModels();
+const { plano: plano_model } = require("../config/database").conectModels();
 class planoServices {
     /**
-     * @param {Object} novoPlano - Objecto com os dados do novo plano
+     * @param {Object} novo_plano - Objecto com os dados do novo plano
      * @returns {{
      *      success: Boolean,
      *      message: String,
@@ -12,34 +12,34 @@ class planoServices {
      *      errors: undefined
      * }} - Objecto contendo o novo plano criado(em caso de sucesso), ou mensagens de erro em caso de insucesso.
      */
-    async createPlano(novoPlano) {
+    async createPlano(novo_plano) {
         try {
             /**
              * @description NESTE TRECHO VERIFICAMOS SE O NOME DO PLANO ESTÁ DISPONÍVEL
              */
-            const planoEncontrado = await planoModel.findOne({
+            const plano_encontrado = await plano_model.findOne({
                 where: {
-                    nome: novoPlano.nome,
+                    nome: novo_plano.nome,
                 },
                 row: true,
             });
-            if (planoEncontrado) {
+            if (plano_encontrado) {
                 return {
                     success: false,
                     message: "Nome do plano indisponível!",
                 };
             }
 
-            const planoCriado = await planoModel.create({
-                nome: novoPlano.nome,
-                tipo: novoPlano.tipo,
-                descricao: novoPlano.descricao,
+            const plano_criado = await plano_model.create({
+                nome: novo_plano.nome,
+                tipo: novo_plano.tipo,
+                descricao: novo_plano.descricao,
             });
 
             return {
                 success: true,
                 message: "Plano criado com sucesso!",
-                data: planoCriado,
+                data: plano_criado,
             };
         } catch (error) {
             return {
@@ -64,7 +64,7 @@ class planoServices {
             /**
              * @description NESTE TRECHO VERIFICAMOS SE O NOME DO PLANO ESTÁ DISPONÍVEL
              */
-            let planoEncontrado = await planoModel.findOne({
+            let plano_encontrado = await plano_model.findOne({
                 where: {
                     [Op.and]: [
                         where(col("nome"), plano.nome),
@@ -73,7 +73,7 @@ class planoServices {
                 },
                 row: true,
             });
-            if (planoEncontrado) {
+            if (plano_encontrado) {
                 return {
                     success: false,
                     status: 409,
@@ -84,13 +84,13 @@ class planoServices {
             /**
              * @description NESTE TRECHO VERIFICACAMOS SE O ID DO PLANO ENVIADO EXISTE
              */
-            planoEncontrado = await planoModel.findOne({
+            plano_encontrado = await plano_model.findOne({
                 where: {
                     id: plano.id,
                 },
                 row: true,
             });
-            if (!planoEncontrado) {
+            if (!plano_encontrado) {
                 return {
                     success: false,
                     status: 404,
@@ -98,7 +98,7 @@ class planoServices {
                 };
             }
 
-            const planosEditados = await planoModel.update(
+            const planos_editados = await plano_model.update(
                 {
                     nome: plano.nome,
                     tipo: plano.tipo,
@@ -110,9 +110,9 @@ class planoServices {
             return {
                 success: true,
                 message: "Plano editado com sucesso!",
-                data: planoEncontrado,
+                data: plano_encontrado,
                 meta: {
-                    totalPlanosEditados: planosEditados,
+                    totalplanos_editados: planos_editados,
                 },
             };
         } catch (error) {
@@ -138,20 +138,20 @@ class planoServices {
             /**
              * @description NESTE TRECHO VERIFICACAMOS SE O ID DO PLANO ENVIADO EXISTE
              */
-            let planoEncontrado = await planoModel.findOne({
+            let plano_encontrado = await plano_model.findOne({
                 where: {
                     id: id,
                 },
                 row: true,
             });
-            if (!planoEncontrado) {
+            if (!plano_encontrado) {
                 return {
                     success: false,
                     message: "ID do plano inexistente!",
                 };
             }
 
-            const planosDeletados = await planoModel.destroy({
+            const planos_deletados = await plano_model.destroy({
                 where: {
                     id: id,
                 },
@@ -160,9 +160,9 @@ class planoServices {
             return {
                 success: true,
                 message: "Plano deletado com sucesso!",
-                data: planoEncontrado,
+                data: plano_encontrado,
                 meta: {
-                    totalPlanosDeletados: planosDeletados,
+                    total_planos_deletados: planos_deletados,
                 },
             };
         } catch (error) {
@@ -188,20 +188,20 @@ class planoServices {
             /**
              * @description NESTE TRECHO VERIFICACAMOS SE O ID DO PLANO ENVIADO EXISTE
              */
-            let planoEncontrado = await planoModel.findOne({
+            let plano_encontrado = await plano_model.findOne({
                 where: {
                     id: id,
                 },
                 row: true,
             });
-            if (!planoEncontrado) {
+            if (!plano_encontrado) {
                 return {
                     success: false,
                     message: "ID do plano inexistente!",
                 };
             }
 
-            const planoDesejado = await planoModel.findOne({
+            const plano_desejado = await plano_model.findOne({
                 where: {
                     id: id,
                 },
@@ -210,7 +210,7 @@ class planoServices {
             return {
                 success: true,
                 message: "Plano encontrado!",
-                data: planoDesejado,
+                data: plano_desejado,
             };
         } catch (error) {
             return {
@@ -222,7 +222,7 @@ class planoServices {
     }
 
     /**
-     * @param {string} [tipoPlano=""] - Adereço usado para filtrar a busca com base o tipo de plano
+     * @param {string} [tipo_plano=""] - Adereço usado para filtrar a busca com base o tipo de plano
      * @returns {{
      *      success: Boolean,
      *      message: String,
@@ -230,14 +230,14 @@ class planoServices {
      *      errors: undefined
      * }} - Objecto contendo o plano deletado(em caso de sucesso), ou mensagens de erro em caso de insucesso.
      */
-    async getPlanos(tipoPlano = "") {
+    async getPlanos(tipo_plano = "") {
         try {
             /**
              * @description BUSCAMOS DO BANCO TODOS OS PLANOS QUE TEM O TIPO PARECIDO COM O FILTRO ENVIADO
              */
-            const planos = await planoModel.findAll({
+            const planos = await plano_model.findAll({
                 where: {
-                    tipo: { [Op.like]: `%${tipoPlano}%` },
+                    tipo: { [Op.like]: `%${tipo_plano}%` },
                 },
                 row: true,
             });
@@ -247,7 +247,7 @@ class planoServices {
                 message: "Lista de planos existentes.",
                 data: planos,
                 meta: {
-                    totalPlanosExistente: planos.length,
+                    total_planos_existente: planos.length,
                 },
             };
         } catch (error) {

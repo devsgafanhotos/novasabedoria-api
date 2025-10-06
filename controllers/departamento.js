@@ -1,11 +1,11 @@
 /**
- * @description IMPORTAÇÃO DO MODULO DE SERVIÇOS DE PLANOS
+ * @description IMPORTAÇÃO DO MODULO DE SERVIÇOS DE DEPARTAMENTOS
  */
-const { planoServices } = require("../services");
+const { departamentoServices } = require("../services");
 
-class planoControllers {
+class departamentoControllers {
     /**
-     * @description Insere um novo registro de plano
+     * @description Insere um novo registro de departamento
      * @param {Request} req - Objecto que contem a requisição e os elementos que ela traz.
      * @param {Response} res - Objecto que controla a resposta.
      * @returns {{
@@ -14,13 +14,13 @@ class planoControllers {
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto de resposta contendo o novo plano criado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
+     * }} - Objecto de resposta contendo o novo departamento criado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
      */
-    cadastrarPlano = async (req, res) => {
+    cadastrarDepartamento = async (req, res) => {
         try {
             const { body } = req;
 
-            const response = await planoServices.createPlano(body);
+            const response = await departamentoServices.createDepartamento(body);
 
             // Em caso de insucesso
             if (!response.success) {
@@ -49,18 +49,18 @@ class planoControllers {
             });
         } catch (error) {
             // Em caso de um outro erro inesperado tratamos aqui.
-            console.log(`\n\nErro interno ao cadastrar plano... ${error}.\n`);
+            console.log(`\n\nErro interno ao cadastrar departamento... ${error}.\n`);
             return res.status(500).json({
                 status: 500,
                 success: false,
-                message: "Erro interno ao cadastrar plano",
+                message: "Erro interno ao cadastrar departamento",
                 errors: `${error}`,
             });
         }
     };
 
     /**
-     * @description Edita um registro de plano
+     * @description Edita um registro de departamento
      * @param {Request} req - Objecto que contem a requisição e os elementos que ela traz.
      * @param {Response} res - Objecto que controla a resposta.
      * @returns {{
@@ -69,13 +69,13 @@ class planoControllers {
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto de resposta contendo o plano editado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
+     * }} - Objecto de resposta contendo o departamento editado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
      */
-    editarPlano = async (req, res) => {
+    editarDepartamento = async (req, res) => {
         try {
             const { body } = req;
 
-            const response = await planoServices.editPlano(body);
+            const response = await departamentoServices.editDepartamento(body);
 
             // Em caso de insucesso
             if (!response.success) {
@@ -104,18 +104,18 @@ class planoControllers {
             });
         } catch (error) {
             // Em caso de um outro erro inesperado tratamos aqui.
-            console.log(`\n\nErro interno ao editar plano... ${error}.\n`);
+            console.log(`\n\nErro interno ao editar departamento... ${error}.\n`);
             return res.status(500).json({
                 status: 500,
                 success: false,
-                message: "Erro interno ao editar plano",
+                message: "Erro interno ao editar departamento",
                 errors: `${error}`,
             });
         }
     };
 
     /**
-     * @description Deletar um registro de plano
+     * @description Deletar um registro de departamento
      * @param {Request} req - Objecto que contem a requisição e os elementos que ela traz.
      * @param {Response} res - Objecto que controla a resposta.
      * @returns {{
@@ -124,13 +124,13 @@ class planoControllers {
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto de resposta contendo o plano deletado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
+     * }} - Objecto de resposta contendo o departamento deletado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
      */
-    deletarPlano = async (req, res) => {
+    deletarDepartamento = async (req, res) => {
         try {
             const { id } = req.body;
 
-            const response = await planoServices.deletePlano(id);
+            const response = await departamentoServices.deleteDepartamento(id);
 
             // Em caso de insucesso
             if (!response.success) {
@@ -159,18 +159,18 @@ class planoControllers {
             });
         } catch (error) {
             // Em caso de um outro erro inesperado tratamos aqui.
-            console.log(`\n\nErro interno ao deletar plano... ${error}.\n`);
+            console.log(`\n\nErro interno ao deletar departamento... ${error}.\n`);
             return res.status(500).json({
                 status: 500,
                 success: false,
-                message: "Erro interno ao deletar plano",
+                message: "Erro interno ao deletar departamento",
                 errors: `${error}`,
             });
         }
     };
 
     /**
-     * @description Deletar um registro de plano
+     * @description Deletar um registro de departamento
      * @param {Request} req - Objecto que contem a requisição e os elementos que ela traz.
      * @param {Response} res - Objecto que controla a resposta.
      * @returns {{
@@ -179,13 +179,13 @@ class planoControllers {
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto de resposta contendo o plano desejado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
+     * }} - Objecto de resposta contendo o departamento desejado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
      */
-    perfilPlano = async (req, res) => {
+    perfilDepartamento = async (req, res) => {
         try {
             const { id=0 } = req.query;
 
-            const response = await planoServices.getPlano(id);
+            const response = await departamentoServices.getDepartamento(id);
 
             // Em caso de insucesso
             if (!response.success) {
@@ -214,18 +214,18 @@ class planoControllers {
             });
         } catch (error) {
             // Em caso de um outro erro inesperado tratamos aqui.
-            console.log(`\n\nErro interno ao buscar plano... ${error}.\n`);
+            console.log(`\n\nErro interno ao buscar departamento... ${error}.\n`);
             return res.status(500).json({
                 status: 500,
                 success: false,
-                message: "Erro interno ao buscar plano",
+                message: "Erro interno ao buscar departamento",
                 errors: `${error}`,
             });
         }
     };
 
     /**
-     * @description Retorna todos os planos existentes
+     * @description Retorna todos os departamentos existentes
      * @param {Request} req - Objecto que contem a requisição e os elementos que ela traz.
      * @param {Response} res - Objecto que controla a resposta.
      * @returns {{
@@ -234,13 +234,13 @@ class planoControllers {
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto de resposta contendo os planos existentes(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
+     * }} - Objecto de resposta contendo os departamentos existentes(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
      */
-    listarPlanos = async (req, res) => {
+    listarDepartamentos = async (req, res) => {
         try {
-            const { tipo = "" } = req.query;
+            const { } = req.query;
 
-            const response = await planoServices.getPlanos(tipo);
+            const response = await departamentoServices.getDepartamentos();
 
             // Em caso de insucesso
             if (!response.success) {
@@ -269,15 +269,15 @@ class planoControllers {
             });
         } catch (error) {
             // Em caso de um outro erro inesperado tratamos aqui.
-            console.log(`\n\nErro ao listar planos... ${error}.\n`);
+            console.log(`\n\nErro ao listar departamentos... ${error}.\n`);
             return res.status(500).json({
                 status: 500,
                 success: false,
-                message: "Erro ao listar planos",
+                message: "Erro ao listar departamentos",
                 errors: `${error}`,
             });
         }
     };
 }
- 
-module.exports = new planoControllers();
+
+module.exports = new departamentoControllers();

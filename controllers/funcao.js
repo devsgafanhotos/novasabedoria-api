@@ -1,11 +1,11 @@
 /**
- * @description IMPORTAÇÃO DO MODULO DE SERVIÇOS DE PLANOS
+ * @description IMPORTAÇÃO DO MODULO DE SERVIÇOS DE funcoeS
  */
-const { planoServices } = require("../services");
+const { funcaoServices } = require("../services");
 
-class planoControllers {
+class funcaoControllers {
     /**
-     * @description Insere um novo registro de plano
+     * @description Insere um novo registro de funcao
      * @param {Request} req - Objecto que contem a requisição e os elementos que ela traz.
      * @param {Response} res - Objecto que controla a resposta.
      * @returns {{
@@ -14,13 +14,13 @@ class planoControllers {
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto de resposta contendo o novo plano criado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
+     * }} - Objecto de resposta contendo o novo funcao criado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
      */
-    cadastrarPlano = async (req, res) => {
+    cadastrarFuncao = async (req, res) => {
         try {
             const { body } = req;
 
-            const response = await planoServices.createPlano(body);
+            const response = await funcaoServices.createFuncao(body);
 
             // Em caso de insucesso
             if (!response.success) {
@@ -36,8 +36,7 @@ class planoControllers {
                 }
 
                 // Se não tiver é porque o erro é do lado do cliente {Conflito de dados ou Chave enviada inexistente}
-                return res.status(409).json({
-                    status: 409,
+                return res.status(response.status).json({
                     ...response,
                 });
             }
@@ -49,18 +48,18 @@ class planoControllers {
             });
         } catch (error) {
             // Em caso de um outro erro inesperado tratamos aqui.
-            console.log(`\n\nErro interno ao cadastrar plano... ${error}.\n`);
+            console.log(`\n\nErro interno ao cadastrar funcao... ${error}.\n`);
             return res.status(500).json({
                 status: 500,
                 success: false,
-                message: "Erro interno ao cadastrar plano",
+                message: "Erro interno ao cadastrar funcao",
                 errors: `${error}`,
             });
         }
     };
 
     /**
-     * @description Edita um registro de plano
+     * @description Edita um registro de funcao
      * @param {Request} req - Objecto que contem a requisição e os elementos que ela traz.
      * @param {Response} res - Objecto que controla a resposta.
      * @returns {{
@@ -69,13 +68,13 @@ class planoControllers {
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto de resposta contendo o plano editado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
+     * }} - Objecto de resposta contendo o funcao editado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
      */
-    editarPlano = async (req, res) => {
+    editarFuncao = async (req, res) => {
         try {
             const { body } = req;
 
-            const response = await planoServices.editPlano(body);
+            const response = await funcaoServices.editFuncao(body);
 
             // Em caso de insucesso
             if (!response.success) {
@@ -104,18 +103,18 @@ class planoControllers {
             });
         } catch (error) {
             // Em caso de um outro erro inesperado tratamos aqui.
-            console.log(`\n\nErro interno ao editar plano... ${error}.\n`);
+            console.log(`\n\nErro interno ao editar funcao... ${error}.\n`);
             return res.status(500).json({
                 status: 500,
                 success: false,
-                message: "Erro interno ao editar plano",
+                message: "Erro interno ao editar funcao",
                 errors: `${error}`,
             });
         }
     };
 
     /**
-     * @description Deletar um registro de plano
+     * @description Deletar um registro de funcao
      * @param {Request} req - Objecto que contem a requisição e os elementos que ela traz.
      * @param {Response} res - Objecto que controla a resposta.
      * @returns {{
@@ -124,13 +123,13 @@ class planoControllers {
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto de resposta contendo o plano deletado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
+     * }} - Objecto de resposta contendo o funcao deletado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
      */
-    deletarPlano = async (req, res) => {
+    deletarFuncao = async (req, res) => {
         try {
             const { id } = req.body;
 
-            const response = await planoServices.deletePlano(id);
+            const response = await funcaoServices.deleteFuncao(id);
 
             // Em caso de insucesso
             if (!response.success) {
@@ -148,6 +147,7 @@ class planoControllers {
 
                 // Se não tiver é porque o erro é do lado do cliente {Conflito de dados ou Chave enviada inexistente}
                 return res.status(404).json({
+                    status: 404,
                     ...response,
                 });
             }
@@ -159,18 +159,18 @@ class planoControllers {
             });
         } catch (error) {
             // Em caso de um outro erro inesperado tratamos aqui.
-            console.log(`\n\nErro interno ao deletar plano... ${error}.\n`);
+            console.log(`\n\nErro interno ao deletar funcao... ${error}.\n`);
             return res.status(500).json({
                 status: 500,
                 success: false,
-                message: "Erro interno ao deletar plano",
+                message: "Erro interno ao deletar funcao",
                 errors: `${error}`,
             });
         }
     };
 
     /**
-     * @description Deletar um registro de plano
+     * @description Deletar um registro de funcao
      * @param {Request} req - Objecto que contem a requisição e os elementos que ela traz.
      * @param {Response} res - Objecto que controla a resposta.
      * @returns {{
@@ -179,13 +179,13 @@ class planoControllers {
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto de resposta contendo o plano desejado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
+     * }} - Objecto de resposta contendo o funcao desejado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
      */
-    perfilPlano = async (req, res) => {
+    perfilFuncao = async (req, res) => {
         try {
             const { id=0 } = req.query;
 
-            const response = await planoServices.getPlano(id);
+            const response = await funcaoServices.getFuncao(id);
 
             // Em caso de insucesso
             if (!response.success) {
@@ -214,18 +214,18 @@ class planoControllers {
             });
         } catch (error) {
             // Em caso de um outro erro inesperado tratamos aqui.
-            console.log(`\n\nErro interno ao buscar plano... ${error}.\n`);
+            console.log(`\n\nErro interno ao buscar funcao... ${error}.\n`);
             return res.status(500).json({
                 status: 500,
                 success: false,
-                message: "Erro interno ao buscar plano",
+                message: "Erro interno ao buscar funcao",
                 errors: `${error}`,
             });
         }
     };
 
     /**
-     * @description Retorna todos os planos existentes
+     * @description Retorna todos os funcoes existentes
      * @param {Request} req - Objecto que contem a requisição e os elementos que ela traz.
      * @param {Response} res - Objecto que controla a resposta.
      * @returns {{
@@ -234,13 +234,13 @@ class planoControllers {
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto de resposta contendo os planos existentes(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
+     * }} - Objecto de resposta contendo os funcoes existentes(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
      */
-    listarPlanos = async (req, res) => {
+    listarFuncoes = async (req, res) => {
         try {
-            const { tipo = "" } = req.query;
+            const { id_departamento } = req.query;
 
-            const response = await planoServices.getPlanos(tipo);
+            const response = await funcaoServices.getFuncoes(id_departamento);
 
             // Em caso de insucesso
             if (!response.success) {
@@ -269,15 +269,15 @@ class planoControllers {
             });
         } catch (error) {
             // Em caso de um outro erro inesperado tratamos aqui.
-            console.log(`\n\nErro ao listar planos... ${error}.\n`);
+            console.log(`\n\nErro ao listar funcoes... ${error}.\n`);
             return res.status(500).json({
                 status: 500,
                 success: false,
-                message: "Erro ao listar planos",
+                message: "Erro ao listar funcoes",
                 errors: `${error}`,
             });
         }
     };
 }
- 
-module.exports = new planoControllers();
+
+module.exports = new funcaoControllers();

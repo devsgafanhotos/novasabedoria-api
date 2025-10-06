@@ -3,4 +3,14 @@
  */
 const planoControllers = require("./plano");
 
-module.exports = { planoControllers };
+/**
+ * @description IMPORTAÇÃO DO CONTROLADOR DE DEPARTAMENTOS
+ */
+const departamentoControllers = require("./departamento");
+
+/**
+ * @description IMPORTAÇÃO DO CONTROLADOR DE funcaoS
+ */
+const funcaoControllers = require("./funcao");
+
+module.exports = { planoControllers, departamentoControllers, funcaoControllers };
