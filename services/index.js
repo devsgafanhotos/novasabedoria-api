@@ -9,8 +9,30 @@ const planoServices = require("./plano");
 const departamentoServices = require("./departamento");
 
 /**
- * @description IMPORTAÇÃO DO MODULO DE SERVIÇO DE funcaoS
+ * @description IMPORTAÇÃO DO MODULO DE SERVIÇO DE FUNCOES
  */
 const funcaoServices = require("./funcao");
 
-module.exports = { planoServices, departamentoServices, funcaoServices };
+/**
+ * @description IMPORTAÇÃO DO MODULO DE SERVIÇO DE disciplina
+ */
+const disciplinaServices = require("./disciplina");
+
+/**
+ * @description IMPORTAÇÃO DO MODULO DE SERVIÇO DE usuario
+ */
+const usuarioServices = require("./usuario");
+
+/**
+ * @description IMPORTAÇÃO DO MODULO DE SERVIÇO DE funcionario
+ */
+const funcionarioServices = require("./funcionario");
+
+module.exports = {
+    planoServices,
+    departamentoServices,
+    funcaoServices,
+    disciplinaServices,
+    usuarioServices,
+    funcionarioServices,
+};

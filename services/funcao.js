@@ -126,7 +126,7 @@ class funcaoServices {
                 };
             }
 
-            const funcaos_editados = await funcao_model.update(
+            const funcaoS_editados = await funcao_model.update(
                 {
                     nome: funcao.nome,
                     descricao: funcao.descricao,
@@ -140,7 +140,7 @@ class funcaoServices {
                 message: "Funcao editado com sucesso!",
                 data: funcao_encontrada,
                 meta: {
-                    total_funcaos_editados: funcaos_editados,
+                    total_funcaoS_editados: funcaoS_editados,
                 },
             };
         } catch (error) {
@@ -179,7 +179,7 @@ class funcaoServices {
                 };
             }
 
-            const funcaos_deletadas = await funcao_model.destroy({
+            const funcaoS_deletadas = await funcao_model.destroy({
                 where: {
                     id: id,
                 },
@@ -190,7 +190,7 @@ class funcaoServices {
                 message: "Funcao deletada com sucesso!",
                 data: funcao_encontrada,
                 meta: {
-                    total_funcaos_deletadas: funcaos_deletadas,
+                    total_funcaoS_deletadas: funcaoS_deletadas,
                 },
             };
         } catch (error) {
@@ -229,16 +229,10 @@ class funcaoServices {
                 };
             }
 
-            const funcao_desejado = await funcao_model.findOne({
-                where: {
-                    id: id,
-                },
-            });
-
             return {
                 success: true,
                 message: "Funcao encontrada!",
-                data: funcao_desejado,
+                data: funcao_encontrada,
             };
         } catch (error) {
             return {
@@ -265,25 +259,25 @@ class funcaoServices {
             } : null;
 
             /**
-             * @description BUSCAMOS DO BANCO TODOS OS funcaoS QUE TEM O TIPO PARECIDO COM O FILTRO ENVIADO
+             * @description BUSCAMOS DO BANCO TODAS AS funcoes QUE TEM O TIPO PARECIDO COM O FILTRO ENVIADO
              */
-            const funcaos = await funcao_model.findAll({
+            const funcoes = await funcao_model.findAll({
                 where: conditionIdDepartamento,
                 row: true,
             });
 
             return {
                 success: true,
-                message: "Lista de funcaos existentes.",
-                data: funcaos,
+                message: "Lista de funcoes existentes.",
+                data: funcoes,
                 meta: {
-                    total_funcaos_existente: funcaos.length,
+                    total_funcoes_existente: funcoes.length,
                 },
             };
         } catch (error) {
             return {
                 success: false,
-                message: "Erro ao listar funcaos",
+                message: "Erro ao listar funcoes",
                 errors: `${error}`,
             };
         }

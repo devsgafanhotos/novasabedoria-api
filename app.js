@@ -42,6 +42,7 @@ app.use(router);
 /**
  *@description COLOCANDO O SERVIDOR PARA RODAR
  */
+const path = require("path");
 app.listen(3000, (error) => {
     if (error) {
         return console.log(`Erro ao rodar o servidor... ${error}`);

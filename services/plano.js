@@ -62,6 +62,18 @@ class planoServices {
     async editPlano(plano) {
         try {
             /**
+             * @description NESTE TRECHO VERIFICACAMOS SE O ID DO PLANO ENVIADO EXISTE
+             */
+            const response = await this.verifyPlanoID(plano.id);
+            if (!response.success) {
+                return {
+                    success: false,
+                    status: 404,
+                    message: "ID do plano inexistente!",
+                };
+            }
+
+            /**
              * @description NESTE TRECHO VERIFICAMOS SE O NOME DO PLANO ESTÁ DISPONÍVEL
              */
             let plano_encontrado = await plano_model.findOne({
@@ -81,23 +93,6 @@ class planoServices {
                 };
             }
 
-            /**
-             * @description NESTE TRECHO VERIFICACAMOS SE O ID DO PLANO ENVIADO EXISTE
-             */
-            plano_encontrado = await plano_model.findOne({
-                where: {
-                    id: plano.id,
-                },
-                row: true,
-            });
-            if (!plano_encontrado) {
-                return {
-                    success: false,
-                    status: 404,
-                    message: "ID do plano inexistente!",
-                };
-            }
-
             const planos_editados = await plano_model.update(
                 {
                     nome: plano.nome,
@@ -112,7 +107,7 @@ class planoServices {
                 message: "Plano editado com sucesso!",
                 data: plano_encontrado,
                 meta: {
-                    totalplanos_editados: planos_editados,
+                    totalplanos_editados: response.data,
                 },
             };
         } catch (error) {
@@ -201,16 +196,10 @@ class planoServices {
                 };
             }
 
-            const plano_desejado = await plano_model.findOne({
-                where: {
-                    id: id,
-                },
-            });
-
             return {
                 success: true,
                 message: "Plano encontrado!",
-                data: plano_desejado,
+                data: plano_encontrado,
             };
         } catch (error) {
             return {
@@ -257,6 +246,35 @@ class planoServices {
                 errors: `${error}`,
             };
         }
+    }
+
+    /**
+     * @param {Number} id
+     * @returns {{
+     *      success: Boolean,
+     * }} - Retorna true se o ID já existe e false se ele não exite
+     */
+    async verifyPlanoID(id) {
+        /**
+         * @description NESTE TRECHO VERIFICACAMOS SE O ID DO plano ENVIADO EXISTE
+         */
+
+        const plano_encontrado = await plano_model.findOne({
+            where: {
+                id: id,
+            },
+            row: true,
+        });
+        if (!plano_encontrado) {
+            return {
+                success: false,
+            };
+        }
+
+        return {
+            success: true,
+            data: plano_encontrado,
+        };
     }
 }
 

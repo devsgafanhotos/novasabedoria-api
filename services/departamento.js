@@ -3,7 +3,7 @@ const { Op, where, col } = require("sequelize");
 // IMPORTAÇÃO DO MODEL DE ITERAÇÃO COM A TABELA departamento DO BANCO DE DADOS
 const { departamento: departamento_model } =
     require("../config/database").conectModels();
-
+    
 class departamentoServices {
     /**
      * @param {Object} novo_departamento - Objecto com os dados do novo departamento
@@ -62,8 +62,10 @@ class departamentoServices {
      */
     async editDepartamento(departamento) {
         try {
+            /**
+             * @description NESTE TRECHO VERIFICACAMOS SE O ID DO departamento ENVIADO EXISTE
+             */
             const response = await this.verifyDepartamentoID(departamento.id);
-
             if (!response.success) {
                 return {
                     success: false,
@@ -194,16 +196,10 @@ class departamentoServices {
                 };
             }
 
-            const departamento_desejado = await departamento_model.findOne({
-                where: {
-                    id: id,
-                },
-            });
-
             return {
                 success: true,
                 message: "Departamento encontrado!",
-                data: departamento_desejado,
+                data: departamento_encontrado,
             };
         } catch (error) {
             return {
@@ -258,7 +254,6 @@ class departamentoServices {
         /**
          * @description NESTE TRECHO VERIFICACAMOS SE O ID DO departamento ENVIADO EXISTE
          */
-        
         const departamento_encontrado = await departamento_model.findOne({
             where: {
                 id: id,

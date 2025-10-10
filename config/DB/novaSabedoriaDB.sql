@@ -46,7 +46,7 @@ CREATE TABLE
         nome VARCHAR(255) not null,
         sobrenome VARCHAR(255) not null,
         data_nascimento DATE not null,
-        telefone VARCHAR(20) not null,
+        telefone VARCHAR(20) not null unique,
         email VARCHAR(255) unique,
         sexo enum ('Masculino', 'Feminino') not null,
         bi varchar(255) not null unique,

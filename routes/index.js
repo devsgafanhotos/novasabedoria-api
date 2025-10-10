@@ -3,7 +3,6 @@
  */
 const router = require("express").Router();
 
-
 /**
  * @description INTEGRAÇÃO DA ROTA DE PLANOS AO ROTEADOR PRINCIPAL
  */
@@ -22,5 +21,16 @@ router.use("/departamento", departamentoRoutes);
 const funcaoRoutes = require("./funcao");
 router.use("/funcao", funcaoRoutes);
 
+/**
+ * @description INTEGRAÇÃO DA ROTA DE DISCIPLINA AO ROTEADOR PRINCIPAL
+ */
+const disciplinaRoutes = require("./disciplina");
+router.use("/disciplina", disciplinaRoutes);
+
+/**
+ * @description INTEGRAÇÃO DA ROTA DE funcionario AO ROTEADOR PRINCIPAL
+ */
+const funcionarioRoutes = require("./funcionario");
+router.use("/funcionario", funcionarioRoutes);
 
 module.exports = { router };

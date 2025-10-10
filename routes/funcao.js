@@ -27,7 +27,7 @@ funcaoRouter.get("/perfil", funcaoControllers.perfilFuncao);
 
 /**
  * @description ROTA QUE RETORNA TODOS OS Funcoes EXISTENTES
- * @route /funcao/listar?tipo=tipo
+ * @route /funcao/listar
  */
 funcaoRouter.get("/listar", funcaoControllers.listarFuncoes);
 
