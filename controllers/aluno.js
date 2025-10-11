@@ -1,11 +1,11 @@
 /**
- * @description IMPORTAÇÃO DO MODULO DE SERVIÇOS DE funcionarios
+ * @description IMPORTAÇÃO DO MODULO DE SERVIÇOS DE alunos
  */
-const { funcionarioServices } = require("../services");
+const { alunoServices } = require("../services");
 
-class funcionarioControllers {
+class alunoControllers {
     /**
-     * @description Insere um novo registro de funcionario
+     * @description Insere um novo registro de aluno
      * @param {Request} req - Objecto que contem a requisição e os elementos que ela traz.
      * @param {Response} res - Objecto que controla a resposta.
      * @returns {{
@@ -14,13 +14,13 @@ class funcionarioControllers {
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto de resposta contendo o novo Funcionario criado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
+     * }} - Objecto de resposta contendo o novo aluno criado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
      */
-    cadastrarFuncionario = async (req, res) => {
+    cadastrarAluno = async (req, res) => {
         try {
             const { body } = req;
 
-            const response = await funcionarioServices.createFuncionario(body);
+            const response = await alunoServices.createAluno(body);
 
             // Em caso de insucesso
             if (!response.success) {
@@ -49,19 +49,19 @@ class funcionarioControllers {
         } catch (error) {
             // Em caso de um outro erro inesperado tratamos aqui.
             console.log(
-                `\n\nErro interno ao cadastrar funcionario... ${error}.\n`
+                `\n\nErro interno ao cadastrar aluno... ${error}.\n`
             );
             return res.status(500).json({
                 status: 500,
                 success: false,
-                message: "Erro interno ao cadastrar funcionario",
+                message: "Erro interno ao cadastrar aluno",
                 errors: `${error}`,
             });
         }
     };
 
     /**
-     * @description Insere um novo registro de funcionario
+     * @description Insere um novo registro de aluno
      * @param {Request} req - Objecto que contem a requisição e os elementos que ela traz.
      * @param {Response} res - Objecto que controla a resposta.
      * @returns {{
@@ -70,13 +70,13 @@ class funcionarioControllers {
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto de resposta contendo o novo Funcionario criado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
+     * }} - Objecto de resposta contendo o novo aluno criado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
      */
-    loginFuncionario = async (req, res) => {
+    loginAluno = async (req, res) => {
         try {
             const { body } = req;
 
-            const response = await funcionarioServices.loginFuncionario(body, res);
+            const response = await alunoServices.loginAluno(body, res);
 
             // Em caso de insucesso
             if (!response.success) {
@@ -105,19 +105,19 @@ class funcionarioControllers {
         } catch (error) {
             // Em caso de um outro erro inesperado tratamos aqui.
             console.log(
-                `\n\nErro interno ao cadastrar funcionario... ${error}.\n`
+                `\n\nErro interno ao cadastrar aluno... ${error}.\n`
             );
             return res.status(500).json({
                 status: 500,
                 success: false,
-                message: "Erro interno ao cadastrar funcionario",
+                message: "Erro interno ao cadastrar aluno",
                 errors: `${error}`,
             });
         }
     };
 
     /**
-     * @description Edita um registro de funcionario
+     * @description Edita um registro de aluno
      * @param {Request} req - Objecto que contem a requisição e os elementos que ela traz.
      * @param {Response} res - Objecto que controla a resposta.
      * @returns {{
@@ -126,13 +126,13 @@ class funcionarioControllers {
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto de resposta contendo o Funcionario editado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
+     * }} - Objecto de resposta contendo o aluno editado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
      */
-    editarFuncionario = async (req, res) => {
+    editarAluno = async (req, res) => {
         try {
             const { body } = req;
 
-            const response = await funcionarioServices.editFuncionario(body);
+            const response = await alunoServices.editAluno(body);
 
             // Em caso de insucesso
             if (!response.success) {
@@ -162,19 +162,19 @@ class funcionarioControllers {
         } catch (error) {
             // Em caso de um outro erro inesperado tratamos aqui.
             console.log(
-                `\n\nErro interno ao editar funcionario... ${error}.\n`
+                `\n\nErro interno ao editar aluno... ${error}.\n`
             );
             return res.status(500).json({
                 status: 500,
                 success: false,
-                message: "Erro interno ao editar funcionario",
+                message: "Erro interno ao editar aluno",
                 errors: `${error}`,
             });
         }
     };
 
     /**
-     * @description Edita a senha em um registro de funcionario
+     * @description Edita a senha em um registro de aluno
      * @param {Request} req - Objecto que contem a requisição e os elementos que ela traz.
      * @param {Response} res - Objecto que controla a resposta.
      * @returns {{
@@ -183,13 +183,13 @@ class funcionarioControllers {
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto de resposta contendo o Funcionario editado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
+     * }} - Objecto de resposta contendo o aluno editado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
      */
-    editarSenhaFuncionario = async (req, res) => {
+    editarSenhaAluno = async (req, res) => {
         try {
             const { id, senhaAntiga, senha } = req.body;
 
-            const response = await funcionarioServices.editPassword(
+            const response = await alunoServices.editPassword(
                 id,
                 senhaAntiga,
                 senha
@@ -223,19 +223,19 @@ class funcionarioControllers {
         } catch (error) {
             // Em caso de um outro erro inesperado tratamos aqui.
             console.log(
-                `\n\nErro interno ao editar funcionario... ${error}.\n`
+                `\n\nErro interno ao editar aluno... ${error}.\n`
             );
             return res.status(500).json({
                 status: 500,
                 success: false,
-                message: "Erro interno ao editar funcionario",
+                message: "Erro interno ao editar aluno",
                 errors: `${error}`,
             });
         }
     };
 
     /**
-     * @description Deletar um registro de funcionario
+     * @description Deletar um registro de aluno
      * @param {Request} req - Objecto que contem a requisição e os elementos que ela traz.
      * @param {Response} res - Objecto que controla a resposta.
      * @returns {{
@@ -244,13 +244,13 @@ class funcionarioControllers {
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto de resposta contendo o Funcionario deletado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
+     * }} - Objecto de resposta contendo o aluno deletado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
      */
-    deletarFuncionario = async (req, res) => {
+    deletarAluno = async (req, res) => {
         try {
             const { id } = req.body;
 
-            const response = await funcionarioServices.deleteFuncionario(id);
+            const response = await alunoServices.deleteAluno(id);
 
             // Em caso de insucesso
             if (!response.success) {
@@ -281,19 +281,19 @@ class funcionarioControllers {
         } catch (error) {
             // Em caso de um outro erro inesperado tratamos aqui.
             console.log(
-                `\n\nErro interno ao deletar funcionario... ${error}.\n`
+                `\n\nErro interno ao deletar aluno... ${error}.\n`
             );
             return res.status(500).json({
                 status: 500,
                 success: false,
-                message: "Erro interno ao deletar funcionario",
+                message: "Erro interno ao deletar aluno",
                 errors: `${error}`,
             });
         }
     };
 
     /**
-     * @description Deletar um registro de funcionario
+     * @description Deletar um registro de aluno
      * @param {Request} req - Objecto que contem a requisição e os elementos que ela traz.
      * @param {Response} res - Objecto que controla a resposta.
      * @returns {{
@@ -302,13 +302,13 @@ class funcionarioControllers {
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto de resposta contendo o Funcionario desejado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
+     * }} - Objecto de resposta contendo o aluno desejado(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
      */
-    perfilFuncionario = async (req, res) => {
+    perfilAluno = async (req, res) => {
         try {
             const { id = 0 } = req.query;
 
-            const response = await funcionarioServices.getFuncionario(id);
+            const response = await alunoServices.getAluno(id);
 
             // Em caso de insucesso
             if (!response.success) {
@@ -338,19 +338,19 @@ class funcionarioControllers {
         } catch (error) {
             // Em caso de um outro erro inesperado tratamos aqui.
             console.log(
-                `\n\nErro interno ao buscar funcionario... ${error}.\n`
+                `\n\nErro interno ao buscar aluno... ${error}.\n`
             );
             return res.status(500).json({
                 status: 500,
                 success: false,
-                message: "Erro interno ao buscar funcionario",
+                message: "Erro interno ao buscar aluno",
                 errors: `${error}`,
             });
         }
     };
 
     /**
-     * @description Retorna todos os Funcionariosexistentes
+     * @description Retorna todos os alunosexistentes
      * @param {Request} req - Objecto que contem a requisição e os elementos que ela traz.
      * @param {Response} res - Objecto que controla a resposta.
      * @returns {{
@@ -359,13 +359,13 @@ class funcionarioControllers {
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto de resposta contendo os Funcionariosexistentes(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
+     * }} - Objecto de resposta contendo os alunos existentes(em caso de sucesso), ou mensagens de erro em caso de insucesso. O código de status da requisição...
      */
-    listarFuncionarios = async (req, res) => {
+    listarAlunos = async (req, res) => {
         try {
             const { id_plano } = req.query;
 
-            const response = await funcionarioServices.getFuncionarios(
+            const response = await alunoServices.getAlunos(
                 id_plano
             );
 
@@ -396,15 +396,15 @@ class funcionarioControllers {
             });
         } catch (error) {
             // Em caso de um outro erro inesperado tratamos aqui.
-            console.log(`\n\nErro ao listar funcionarios... ${error}.\n`);
+            console.log(`\n\nErro ao listar alunos... ${error}.\n`);
             return res.status(500).json({
                 status: 500,
                 success: false,
-                message: "Erro ao listar funcionarios",
+                message: "Erro ao listar alunos",
                 errors: `${error}`,
             });
         }
     };
 }
 
-module.exports = new funcionarioControllers();
+module.exports = new alunoControllers();

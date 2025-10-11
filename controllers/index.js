@@ -9,7 +9,7 @@ const planoControllers = require("./plano");
 const departamentoControllers = require("./departamento");
 
 /**
- * @description IMPORTAÇÃO DO CONTROLADOR DEFUNCOES
+ * @description IMPORTAÇÃO DO CONTROLADOR DE FUNCOES
  */
 const funcaoControllers = require("./funcao");
 
@@ -28,6 +28,11 @@ const usuarioControllers = require("./usuario");
  */
 const funcionarioControllers = require("./funcionario");
 
+/**
+ * @description IMPORTAÇÃO DO CONTROLADOR DE alunoS
+ */
+const alunoControllers = require("./aluno");
+
 module.exports = {
     planoControllers,
     departamentoControllers,
@@ -35,4 +40,5 @@ module.exports = {
     disciplinaControllers,
     usuarioControllers,
     funcionarioControllers,
+    alunoControllers,
 };

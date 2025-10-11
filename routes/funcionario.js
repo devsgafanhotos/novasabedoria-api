@@ -8,6 +8,12 @@ const { funcionarioControllers } = require("../controllers");
 funcionarioRouter.post("/cadastrar", funcionarioControllers.cadastrarFuncionario);
 
 /**
+ * @description ROTA QUE RECEBE OS DADOS DE UM NOVO funcionario E CADASTRA NO BANCO
+ * @route /funcionario/login
+ */
+funcionarioRouter.post("/login", funcionarioControllers.loginFuncionario);
+
+/**
  * @description ROTA QUE RECEBE OS DADOS DE UM funcionario EXISTENTE PARA EDITA-LO
  * @route /funcionario/editar
  */
@@ -17,7 +23,7 @@ funcionarioRouter.put("/editar", funcionarioControllers.editarFuncionario);
  * @description ROTA QUE RECEBE OS DADOS DE UM funcionario EXISTENTE PARA EDITA-LO
  * @route /funcionario/editar
  */
-funcionarioRouter.put("/editarSenha", funcionarioControllers.editarSenhaFuncionario);
+funcionarioRouter.put("/editarsenha", funcionarioControllers.editarSenhaFuncionario);
 
 /**
  * @description ROTA QUE RECEBE OS DADOS DE UM funcionario EXISTENTE PARA EDITA-LO

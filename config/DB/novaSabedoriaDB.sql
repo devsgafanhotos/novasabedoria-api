@@ -49,6 +49,7 @@ CREATE TABLE
         telefone VARCHAR(20) not null unique,
         email VARCHAR(255) unique,
         sexo enum ('Masculino', 'Feminino') not null,
+        tipo enum ('Admin', 'Normal') not null default "Normal",
         bi varchar(255) not null unique,
         data_cadastro timestamp default current_timestamp,
         nome_pai VARCHAR(255),

@@ -1,26 +1,27 @@
 const { Op, where, col } = require("sequelize");
 
-// IMPORTAÇÃO DO MODEL DE ITERAÇÃO COM A TABELA funcionario DO BANCO DE DADOS
-const { funcionario: funcionario_model } =
-    require("../config/database").conectModels();
+// IMPORTAÇÃO DO MODEL DE ITERAÇÃO COM A TABELA aluno DO BANCO DE DADOS
+const { aluno: aluno_model } = require("../config/database").conectModels();
 
 const usuarioServices = require("./usuario");
 
-class funcionarioServices {
+const { verifyFuncionarioID } = require("./funcionario");
+
+class alunoServices {
     /**
-     * @param {Object} novo_funcionario - Objecto com os dados do novo funcionario
+     * @param {Object} novo_aluno - Objecto com os dados do novo aluno
      * @returns {{
      *      success: Boolean,
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto contendo o novo funcionario criado(em caso de sucesso), ou mensagens de erro em caso de insucesso.
+     * }} - Objecto contendo o novo aluno criado(em caso de sucesso), ou mensagens de erro em caso de insucesso.
      */
-    async createFuncionario(novo_funcionario) {
+    async createAluno(novo_aluno) {
         try {
             let responseVerify = await usuarioServices.verifyUserEmail(
-                novo_funcionario.email,
-                { entidade: "funcionario" }
+                novo_aluno.email,
+                { entidade: "Aluno" }
             );
             if (responseVerify.success) {
                 return {
@@ -31,8 +32,8 @@ class funcionarioServices {
             }
 
             responseVerify = await usuarioServices.verifyUserTelefone(
-                novo_funcionario.telefone,
-                { entidade: "funcionario" }
+                novo_aluno.telefone,
+                { entidade: "Aluno" }
             );
             if (responseVerify.success) {
                 return {
@@ -42,9 +43,7 @@ class funcionarioServices {
                 };
             }
 
-            responseVerify = await this.verifyFuncionarioBi(
-                novo_funcionario.bi
-            );
+            responseVerify = await this.verifyAlunoBi(novo_aluno.bi);
             if (responseVerify.success) {
                 return {
                     success: false,
@@ -54,72 +53,69 @@ class funcionarioServices {
             }
 
             /**
-             * @description NESTE TRECHO VERIFICAMOS SE O ID DO funcionario QUE CADASTROU EXISTE
+             * @description NESTE TRECHO VERIFICAMOS SE O ID DO aluno QUE CADASTROU EXISTE
              */
-            const funcionariosExistentes = await this.getFuncionarios();
-            if (funcionariosExistentes.meta.total_funcionarios_existente) {
-                const response = await this.verifyFuncionarioID(
-                    novo_funcionario.id_funcionario
-                );
-                if (!response.success) {
-                    return {
-                        success: false,
-                        status: 404,
-                        message: "ID do funcionário que cadastrou inexistente!",
-                    };
-                }
+            const response = await verifyFuncionarioID(
+                novo_aluno.id_funcionario
+            );
+            if (!response.success) {
+                return {
+                    success: false,
+                    status: 404,
+                    message: "ID do funcionário que cadastrou inexistente!",
+                };
             }
 
             /**
              * @description NESTE TRECHO GERAMOS O HASH DA SENHA A PARTRIR DO Nº DE TELEFONE
              */
             const senhaHash = await usuarioServices.createHash(
-                novo_funcionario.telefone
+                novo_aluno.telefone
             );
 
-            const funcionario_criado = await funcionario_model.create({
-                nome: novo_funcionario.nome,
-                sobrenome: novo_funcionario.sobrenome,
-                data_nascimento: novo_funcionario.data_nascimento,
-                telefone: novo_funcionario.telefone,
-                email: novo_funcionario.email,
-                sexo: novo_funcionario.sexo,
-                bi: novo_funcionario.bi,
-                nome_pai: novo_funcionario.nome_pai,
-                nome_mae: novo_funcionario.nome_mae,
+            const aluno_criado = await aluno_model.create({
+                nome: novo_aluno.nome,
+                sobrenome: novo_aluno.sobrenome,
+                data_nascimento: novo_aluno.data_nascimento,
+                telefone: novo_aluno.telefone,
+                email: novo_aluno.email,
+                sexo: novo_aluno.sexo,
+                bi: novo_aluno.bi,
+                nome_pai: novo_aluno.nome_pai,
+                nome_mae: novo_aluno.nome_mae,
                 senha: senhaHash,
-                id_funcionario: novo_funcionario.id_funcionario,
+                id_funcionario: novo_aluno.id_funcionario,
             });
 
             return {
                 success: true,
-                message: "Funcionario criado com sucesso!",
-                data: funcionario_criado,
+                message: "Aluno criado com sucesso!",
+                data: aluno_criado,
             };
         } catch (error) {
             return {
                 success: false,
-                message: "Erro ao cadastrar funcionario",
+                message: "Erro ao cadastrar aluno",
                 errors: `${error}`,
             };
         }
     }
 
     /**
-     * @param {Object} data - Objecto com os dados do novo funcionario
+     * @param {Object} data - Objecto com os dados do novo aluno
      * @param {Response} res - Objecto de resposta para podermos ingetar o cookie a partir daqui
      * @returns {{
      *      success: Boolean,
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto contendo o novo funcionario criado(em caso de sucesso), ou mensagens de erro em caso de insucesso.
+     * }} - Objecto contendo o novo aluno criado(em caso de sucesso), ou mensagens de erro em caso de insucesso.
      */
-    async loginFuncionario(data, res) {
+    async loginAluno(data, res) {
         try {
             let responseEmail = await usuarioServices.verifyUserEmail(
                 data.email,
-                { entidade: "funcionario" }
+                { entidade: "aluno" }
             );
 
             if (!responseEmail.success) {
@@ -136,6 +132,7 @@ class funcionarioServices {
                 responseEmail.data.senha,
                 data.senha
             );
+
             if (!responseSenha) {
                 return {
                     success: false,
@@ -143,11 +140,6 @@ class funcionarioServices {
                     message: "Senha incorreta!",
                 };
             }
-
-            /**
-             * @description Neste trecho pegamos qual a função do usuario
-             */
-            const funcoes = [];
 
             /**
              * @description NESTE TRECHO GERAMOS OS TOKENS {ACCESS E REFRESH}
@@ -158,8 +150,6 @@ class funcionarioServices {
                 sobrenome: responseEmail.data.sobrenome,
                 telefone: responseEmail.data.telefone,
                 email: responseEmail.data.email,
-                tipo: responseEmail.data.tipo,
-                funcao: funcoes,
             };
             const ACCESS_TOKEN = await usuarioServices.createToken(
                 payload,
@@ -189,36 +179,37 @@ class funcionarioServices {
         } catch (error) {
             return {
                 success: false,
-                message: "Erro ao cadastrar funcionario",
+                message: "Erro ao cadastrar aluno",
                 errors: `${error}`,
             };
         }
     }
 
     /**
-     * @param {Object} funcionario - Objecto com os dados do novo funcionario
+     * @param {Object} aluno - Objecto com os dados do novo aluno
      * @returns {{
      *      success: Boolean,
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto contendo o funcionario antigo editado(em caso de sucesso), ou mensagens de erro em caso de insucesso.
+     * }} - Objecto contendo o aluno antigo editado(em caso de sucesso), ou mensagens de erro em caso de insucesso.
      */
-    async editFuncionario(funcionario) {
+    async editAluno(aluno) {
         try {
-            const responseId = await this.verifyFuncionarioID(funcionario.id);
+            const responseId = await this.verifyAlunoID(aluno.id);
             if (!responseId.success) {
                 return {
                     success: false,
                     status: 404,
-                    message: "ID do funcionario inexistente!",
+                    message: "ID do aluno inexistente!",
                 };
             }
 
             let responseVerify = await usuarioServices.verifyUserEmail(
-                funcionario.email,
-                { id: funcionario.id }
+                aluno.email,
+                { entidade: "aluno", id: aluno.id }
             );
+
             if (responseVerify.success) {
                 return {
                     success: false,
@@ -228,8 +219,8 @@ class funcionarioServices {
             }
 
             responseVerify = await usuarioServices.verifyUserTelefone(
-                funcionario.telefone,
-                { id: funcionario.id }
+                aluno.telefone,
+                { entidade: "aluno", id: aluno.id }
             );
             if (responseVerify.success) {
                 return {
@@ -239,10 +230,7 @@ class funcionarioServices {
                 };
             }
 
-            responseVerify = await this.verifyFuncionarioBi(
-                funcionario.bi,
-                funcionario.id
-            );
+            responseVerify = await this.verifyAlunoBi(aluno.bi, aluno.id);
             if (responseVerify.success) {
                 return {
                     success: false,
@@ -251,40 +239,40 @@ class funcionarioServices {
                 };
             }
 
-            const funcionarios_editados = await funcionario_model.update(
+            const alunos_editados = await aluno_model.update(
                 {
-                    nome: funcionario.nome,
-                    sobrenome: funcionario.sobrenome,
-                    data_nascimento: funcionario.data_nascimento,
-                    telefone: funcionario.telefone,
-                    email: funcionario.email,
-                    sexo: funcionario.sexo,
-                    bi: funcionario.bi,
-                    nome_pai: funcionario.nome_pai,
-                    nome_mae: funcionario.nome_mae,
+                    nome: aluno.nome,
+                    sobrenome: aluno.sobrenome,
+                    data_nascimento: aluno.data_nascimento,
+                    telefone: aluno.telefone,
+                    email: aluno.email,
+                    sexo: aluno.sexo,
+                    bi: aluno.bi,
+                    nome_pai: aluno.nome_pai,
+                    nome_mae: aluno.nome_mae,
                 },
-                { where: { id: funcionario.id } }
+                { where: { id: aluno.id } }
             );
 
             return {
                 success: true,
-                message: "Funcionario editado com sucesso!",
+                message: "Aluno editado com sucesso!",
                 data: responseId.data,
                 meta: {
-                    total_funcionarios_editados: funcionarios_editados,
+                    total_alunos_editados: alunos_editados,
                 },
             };
         } catch (error) {
             return {
                 success: false,
-                message: "Erro ao cadastrar funcionario",
+                message: "Erro ao cadastrar aluno",
                 errors: `${error}`,
             };
         }
     }
 
     /**
-     * @param {Number} id - Id do funcionario que desejamos atualisar a senha
+     * @param {Number} id - Id do aluno que desejamos atualisar a senha
      * @param {String} senhaAntiga Senha antiga do funcionário
      * @param {String} senha Senha nova do funcionário
      * @returns {{
@@ -292,16 +280,16 @@ class funcionarioServices {
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto contendo o funcionario antigo editado(em caso de sucesso), ou mensagens de erro em caso de insucesso.
+     * }} - Objecto contendo o aluno antigo editado(em caso de sucesso), ou mensagens de erro em caso de insucesso.
      */
     async editPassword(id, senhaAntiga, senha) {
         try {
-            const responseId = await this.verifyFuncionarioID(id);
+            const responseId = await this.verifyAlunoID(id);
             if (!responseId.success) {
                 return {
                     success: false,
                     status: 404,
-                    message: "ID do funcionario inexistente!",
+                    message: "ID do aluno inexistente!",
                 };
             }
 
@@ -327,7 +315,7 @@ class funcionarioServices {
              */
             const senhaHash = await usuarioServices.createHash(senha);
 
-            const funcionarios_editados = await funcionario_model.update(
+            const alunos_editados = await aluno_model.update(
                 {
                     senha: senhaHash,
                 },
@@ -339,42 +327,42 @@ class funcionarioServices {
                 message: "Senha alterada com sucesso!",
                 data: responseId.data,
                 meta: {
-                    total_funcionarios_editados: funcionarios_editados,
+                    total_alunos_editados: alunos_editados,
                 },
             };
         } catch (error) {
             return {
                 success: false,
-                message: "Erro ao editar senha funcionario",
+                message: "Erro ao editar senha aluno",
                 errors: `${error}`,
             };
         }
     }
 
     /**
-     * @param {Number} id - ID do funcionario a ser deletada
+     * @param {Number} id - ID do aluno a ser deletado
      * @returns {{
      *      success: Boolean,
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto contendo o funcionario deletada(em caso de sucesso), ou mensagens de erro em caso de insucesso.
+     * }} - Objecto contendo o aluno deletado(em caso de sucesso), ou mensagens de erro em caso de insucesso.
      */
-    async deleteFuncionario(id) {
+    async deleteAluno(id) {
         try {
             /**
-             * @description NESTE TRECHO VERIFICACAMOS SE O ID do funcionario ENVIADO EXISTE
+             * @description NESTE TRECHO VERIFICACAMOS SE O ID do aluno ENVIADO EXISTE
              */
-            const responseFuncionario = await this.verifyFuncionarioID(id);
-            if (!responseFuncionario.success) {
+            const responsealuno = await this.verifyAlunoID(id);
+            if (!responsealuno.success) {
                 return {
                     success: false,
                     status: 404,
-                    message: "ID do funcionario inexistente!",
+                    message: "ID do aluno inexistente!",
                 };
             }
 
-            const funcionarios_deletadas = await funcionario_model.destroy({
+            const alunos_deletados = await aluno_model.destroy({
                 where: {
                     id: id,
                 },
@@ -382,57 +370,57 @@ class funcionarioServices {
 
             return {
                 success: true,
-                message: "Funcionario deletada com sucesso!",
-                data: responseFuncionario.data,
+                message: "Aluno deletado com sucesso!",
+                data: responsealuno.data,
                 meta: {
-                    total_funcionarios_deletadas: funcionarios_deletadas,
+                    total_alunos_deletados: alunos_deletados,
                 },
             };
         } catch (error) {
             return {
                 success: false,
-                message: "Erro ao deletar funcionario",
+                message: "Erro ao deletar aluno",
                 errors: `${error}`,
             };
         }
     }
 
     /**
-     * @param {Number} id - ID do funcionario desejado
+     * @param {Number} id - ID do aluno desejado
      * @returns {{
      *      success: Boolean,
      *      message: String,
      *      data: JSON,
      *      errors: undefined
-     * }} - Objecto contendo o funcionario desejado(em caso de sucesso), ou mensagens de erro em caso de insucesso.
+     * }} - Objecto contendo o aluno desejado(em caso de sucesso), ou mensagens de erro em caso de insucesso.
      */
-    async getFuncionario(id) {
+    async getAluno(id) {
         try {
             /**
-             * @description NESTE TRECHO VERIFICACAMOS SE O ID DO funcionario ENVIADO EXISTE
+             * @description NESTE TRECHO VERIFICACAMOS SE O ID DO aluno ENVIADO EXISTE
              */
-            let funcionario_encontrado = await funcionario_model.findOne({
+            let aluno_encontrado = await aluno_model.findOne({
                 where: {
                     id: id,
                 },
                 row: true,
             });
-            if (!funcionario_encontrado) {
+            if (!aluno_encontrado) {
                 return {
                     success: false,
-                    message: "ID do funcionario inexistente!",
+                    message: "ID do aluno inexistente!",
                 };
             }
 
             return {
                 success: true,
-                message: "Funcionario encontrado!",
-                data: funcionario_encontrado,
+                message: "Aluno encontrado!",
+                data: aluno_encontrado,
             };
         } catch (error) {
             return {
                 success: false,
-                message: "Erro ao buscar funcionario",
+                message: "Erro ao buscar aluno",
                 errors: `${error}`,
             };
         }
@@ -444,29 +432,29 @@ class funcionarioServices {
      *      message: String,
      *      data: Array,
      *      errors: undefined
-     * }} - Objecto contendo o funcionario deletada(em caso de sucesso), ou mensagens de erro em caso de insucesso.
+     * }} - Objecto contendo o aluno deletado(em caso de sucesso), ou mensagens de erro em caso de insucesso.
      */
-    async getFuncionarios() {
+    async getAlunos() {
         try {
             /**
-             * @description BUSCAMOS DO BANCO TODOS OS funcionarios
+             * @description BUSCAMOS DO BANCO TODOS OS alunos
              */
-            const funcionarios = await funcionario_model.findAll({
+            const alunos = await aluno_model.findAll({
                 row: true,
             });
 
             return {
                 success: true,
-                message: "Lista de funcionarios existentes.",
-                data: funcionarios,
+                message: "Lista de alunos existentes.",
+                data: alunos,
                 meta: {
-                    total_funcionarios_existente: funcionarios.length,
+                    total_alunos_existente: alunos.length,
                 },
             };
         } catch (error) {
             return {
                 success: false,
-                message: "Erro ao listar funcionarios",
+                message: "Erro ao listar alunos",
                 errors: `${error}`,
             };
         }
@@ -478,18 +466,18 @@ class funcionarioServices {
      *      success: Boolean,
      * }} - Retorna true se já existe e false se ele não exite
      */
-    async verifyFuncionarioID(id) {
+    async verifyAlunoID(id) {
         /**
-         * @description NESTE TRECHO VERIFICACAMOS SE O ID DO funcionario ENVIADO EXISTE
+         * @description NESTE TRECHO VERIFICACAMOS SE O ID DO aluno ENVIADO EXISTE
          */
 
-        const funcionario_encontrado = await funcionario_model.findOne({
+        const aluno_encontrado = await aluno_model.findOne({
             where: {
                 id: id,
             },
             row: true,
         });
-        if (!funcionario_encontrado) {
+        if (!aluno_encontrado) {
             return {
                 success: false,
             };
@@ -497,7 +485,7 @@ class funcionarioServices {
 
         return {
             success: true,
-            data: funcionario_encontrado,
+            data: aluno_encontrado,
         };
     }
 
@@ -508,21 +496,21 @@ class funcionarioServices {
      *      success: Boolean,
      * }} - Retorna true se o ID já existe e false se ele não exite
      */
-    async verifyFuncionarioBi(bi, id = null) {
+    async verifyAlunoBi(bi, id = null) {
         const idCondition = id && {
             [Op.not]: [where(col("id"), id)],
         };
 
         /**
-         * @description NESTE TRECHO VERIFICAMOS SE O bi DO funcionario ESTÁ DISPONÍVEL
+         * @description NESTE TRECHO VERIFICAMOS SE O bi DO aluno ESTÁ DISPONÍVEL
          */
-        let funcionario_encontrado = await funcionario_model.findOne({
+        let aluno_encontrado = await aluno_model.findOne({
             where: {
                 [Op.and]: [where(col("bi"), bi), idCondition],
             },
             row: true,
         });
-        if (!funcionario_encontrado) {
+        if (!aluno_encontrado) {
             return {
                 success: false,
             };
@@ -530,9 +518,9 @@ class funcionarioServices {
 
         return {
             success: true,
-            data: funcionario_encontrado,
+            data: aluno_encontrado,
         };
     }
 }
 
-module.exports = new funcionarioServices();
+module.exports = new alunoServices();

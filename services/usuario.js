@@ -1,5 +1,12 @@
 const { Op, col, where } = require("sequelize");
 const argon2 = require("argon2");
+const jwt = require("jsonwebtoken");
+
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
+
+const ACCESS_TOKEN_EXPIRATION = process.env.ACCESS_TOKEN_EXPIRATION;
+const REFRESH_TOKEN_EXPIRATION = process.env.REFRESH_TOKEN_EXPIRATION;
 
 // IMPORTAÇÃO DO MODEL DE ITERAÇÃO COM A TABELA funcionario DO BANCO DE DADOS
 const { funcionario: funcionario_model } =
@@ -14,6 +21,7 @@ class usuarioServices {
      * @param {Number} [Options.id=null]
      * @returns {{
      *      success: Boolean,
+     *      data: JSON
      * }} - Retorna true se já existe e false se ele não exite
      */
     async verifyUserEmail(email, { entidade = "funcionario", id = null }) {
@@ -21,9 +29,8 @@ class usuarioServices {
             [Op.not]: [where(col("id"), id)],
         };
 
-        const model = entidade == "funcionario"
-            ? funcionario_model
-            : aluno_model;
+        const model =
+            entidade == "funcionario" ? funcionario_model : aluno_model;
 
         /**
          * @description NESTE TRECHO VERIFICAMOS SE O EMAIL DO usuario ESTÁ DISPONÍVEL
@@ -56,14 +63,16 @@ class usuarioServices {
      *      success: Boolean,
      * }} - Retorna true se já existe e false se ele não exite
      */
-    async verifyUserTelefone(telefone, { entidade = "funcionario", id = null }) {
+    async verifyUserTelefone(
+        telefone,
+        { entidade = "funcionario", id = null }
+    ) {
         const idCondition = id && {
             [Op.not]: [where(col("id"), id)],
         };
 
-        const model = entidade == "funcionario"
-            ? funcionario_model
-            : aluno_model;
+        const model =
+            entidade == "funcionario" ? funcionario_model : aluno_model;
 
         /**
          * @description NESTE TRECHO VERIFICAMOS SE O telefone DO usuario ESTÁ DISPONÍVEL
@@ -108,8 +117,24 @@ class usuarioServices {
      */
     async verifyHash(hash, string) {
         const valid = await argon2.verify(hash, string);
-
         return valid;
+    }
+
+    /**
+     * @param {JSON} payload - Dados que serão guardados no token
+     * @param {String} type - Tipo de token a gerar {ACCESS, REFRESH}
+     * @returns {String} Token gerado
+     */
+    async createToken(payload, type = "ACCESS") {
+        const token = (type = "ACCESS"
+            ? jwt.sign({ payload }, ACCESS_TOKEN_SECRET, {
+                  expiresIn: ACCESS_TOKEN_EXPIRATION,
+              })
+            : jwt.sign({ payload }, REFRESH_TOKEN_SECRET, {
+                  expiresIn: REFRESH_TOKEN_EXPIRATION,
+              }));
+
+        return token;
     }
 }
 module.exports = new usuarioServices();

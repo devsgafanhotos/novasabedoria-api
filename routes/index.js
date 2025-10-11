@@ -39,4 +39,10 @@ router.use("/usuario", usuarioRoutes);
 const funcionarioRoutes = require("./funcionario");
 router.use("/funcionario", funcionarioRoutes);
 
+/**
+ * @description INTEGRAÇÃO DA ROTA DE aluno AO ROTEADOR PRINCIPAL
+ */
+const alunoRoutes = require("./aluno");
+router.use("/aluno", alunoRoutes);
+
 module.exports = { router };
