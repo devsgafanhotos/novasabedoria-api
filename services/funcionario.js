@@ -18,8 +18,9 @@ class funcionarioServices {
      */
     async createFuncionario(novo_funcionario) {
         try {
-            let responseVerify = await this.verifyFuncionarioEmail(
-                novo_funcionario.email
+            let responseVerify = await usuarioServices.verifyUserEmail(
+                novo_funcionario.email,
+                {entidade: "funcionario"}
             );
             if (responseVerify.success) {
                 return {
@@ -29,8 +30,9 @@ class funcionarioServices {
                 };
             }
 
-            responseVerify = await this.verifyFuncionarioTelefone(
-                novo_funcionario.telefone
+            responseVerify = await usuarioServices.verifyUserTelefone(
+                novo_funcionario.telefone,
+                {entidade: "funcionario"}
             );
             if (responseVerify.success) {
                 return {
@@ -123,9 +125,9 @@ class funcionarioServices {
                 };
             }
 
-            let responseVerify = await this.verifyFuncionarioEmail(
+            let responseVerify = await usuarioServices.verifyUserEmail(
                 funcionario.email,
-                funcionario.id
+                {id: funcionario.id}
             );
             if (responseVerify.success) {
                 return {
@@ -135,9 +137,9 @@ class funcionarioServices {
                 };
             }
 
-            responseVerify = await this.verifyFuncionarioTelefone(
+            responseVerify = await usuarioServices.verifyUserTelefone(
                 funcionario.telefone,
-                funcionario.id
+                {id: funcionario.id}
             );
             if (responseVerify.success) {
                 return {
@@ -393,39 +395,6 @@ class funcionarioServices {
         const funcionario_encontrado = await funcionario_model.findOne({
             where: {
                 id: id,
-            },
-            row: true,
-        });
-        if (!funcionario_encontrado) {
-            return {
-                success: false,
-            };
-        }
-
-        return {
-            success: true,
-            data: funcionario_encontrado,
-        };
-    }
-
-    /**
-     * @param {String} email
-     * @param {Number} id
-     * @returns {{
-     *      success: Boolean,
-     * }} - Retorna true se já existe e false se ele não exite
-     */
-    async verifyFuncionarioEmail(email, id = null) {
-        const idCondition = id && {
-            [Op.not]: [where(col("id"), id)],
-        };
-
-        /**
-         * @description NESTE TRECHO VERIFICAMOS SE O EMAIL DO funcionario ESTÁ DISPONÍVEL
-         */
-        let funcionario_encontrado = await funcionario_model.findOne({
-            where: {
-                [Op.and]: [where(col("email"), email), idCondition],
             },
             row: true,
         });

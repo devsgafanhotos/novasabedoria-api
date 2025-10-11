@@ -19,6 +19,11 @@ const funcaoControllers = require("./funcao");
 const disciplinaControllers = require("./disciplina");
 
 /**
+ * @description IMPORTAÇÃO DO CONTROLADOR DE usuario
+ */
+const usuarioControllers = require("./usuario");
+
+/**
  * @description IMPORTAÇÃO DO CONTROLADOR DE funcionarioS
  */
 const funcionarioControllers = require("./funcionario");
@@ -28,5 +33,6 @@ module.exports = {
     departamentoControllers,
     funcaoControllers,
     disciplinaControllers,
+    usuarioControllers,
     funcionarioControllers,
 };

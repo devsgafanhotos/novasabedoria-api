@@ -1,6 +1,92 @@
+const { Op, col, where } = require("sequelize");
 const argon2 = require("argon2");
 
+// IMPORTAÇÃO DO MODEL DE ITERAÇÃO COM A TABELA funcionario DO BANCO DE DADOS
+const { funcionario: funcionario_model } =
+    require("../config/database").conectModels();
+
+const { aluno: aluno_model } = require("../config/database").conectModels();
 class usuarioServices {
+    /**
+     * @param {String} email - Email a verificar se já existe
+     * @param {Object} Options
+     * @param {String} [Options.entidade="funcionario"] - Entidade onde desejamos verificar (funcionario ou aluno)
+     * @param {Number} [Options.id=null]
+     * @returns {{
+     *      success: Boolean,
+     * }} - Retorna true se já existe e false se ele não exite
+     */
+    async verifyUserEmail(email, { entidade = "funcionario", id = null }) {
+        const idCondition = id && {
+            [Op.not]: [where(col("id"), id)],
+        };
+
+        const model = entidade == "funcionario"
+            ? funcionario_model
+            : aluno_model;
+
+        /**
+         * @description NESTE TRECHO VERIFICAMOS SE O EMAIL DO usuario ESTÁ DISPONÍVEL
+         */
+        let usuario_encontrado = await model.findOne({
+            where: {
+                [Op.and]: [where(col("email"), email), idCondition],
+            },
+            row: true,
+        });
+
+        if (!usuario_encontrado) {
+            return {
+                success: false,
+            };
+        }
+
+        return {
+            success: true,
+            data: usuario_encontrado,
+        };
+    }
+
+    /**
+     * @param {String} telefone - Telefone a verificar se já existe
+     * @param {Object} Options
+     * @param {String} [Options.entidade="funcionario"] - Entidade onde desejamos verificar (funcionario ou aluno)
+     * @param {Number} [Options.id=null]
+     * @returns {{
+     *      success: Boolean,
+     * }} - Retorna true se já existe e false se ele não exite
+     */
+    async verifyUserTelefone(telefone, { entidade = "funcionario", id = null }) {
+        const idCondition = id && {
+            [Op.not]: [where(col("id"), id)],
+        };
+
+        const model = entidade == "funcionario"
+            ? funcionario_model
+            : aluno_model;
+
+        /**
+         * @description NESTE TRECHO VERIFICAMOS SE O telefone DO usuario ESTÁ DISPONÍVEL
+         */
+        let usuario_encontrado = await model.findOne({
+            where: {
+                [Op.and]: [where(col("telefone"), telefone), idCondition],
+            },
+            row: true,
+        });
+
+        if (!usuario_encontrado) {
+            return {
+                success: false,
+            };
+        }
+
+        return {
+            success: true,
+            data: usuario_encontrado,
+        };
+    }
+
     /**
      *
      * @param {String} string - String que desejamos gerar o hash

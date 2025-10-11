@@ -28,6 +28,12 @@ const disciplinaRoutes = require("./disciplina");
 router.use("/disciplina", disciplinaRoutes);
 
 /**
+ * @description INTEGRAÇÃO DA ROTA DE usuario AO ROTEADOR PRINCIPAL
+ */
+const usuarioRoutes = require("./usuario");
+router.use("/usuario", usuarioRoutes);
+
+/**
  * @description INTEGRAÇÃO DA ROTA DE funcionario AO ROTEADOR PRINCIPAL
  */
 const funcionarioRoutes = require("./funcionario");
