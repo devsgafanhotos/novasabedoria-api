@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     numero_alunos: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     numero_vagas: {
       type: DataTypes.INTEGER,

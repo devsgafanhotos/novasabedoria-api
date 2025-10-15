@@ -45,4 +45,16 @@ router.use("/funcionario", funcionarioRoutes);
 const alunoRoutes = require("./aluno");
 router.use("/aluno", alunoRoutes);
 
+/**
+ * @description INTEGRAÇÃO DA ROTA DE turma AO ROTEADOR PRINCIPAL
+ */
+const turmaRoutes = require("./turma");
+router.use("/turma", turmaRoutes);
+
+/**
+ * @description INTEGRAÇÃO DA ROTA DE receita AO ROTEADOR PRINCIPAL
+ */
+const receitaRoutes = require("./receita");
+router.use("/receita", receitaRoutes);
+
 module.exports = { router };

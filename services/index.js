@@ -33,6 +33,16 @@ const funcionarioServices = require("./funcionario");
  */
 const alunoServices = require("./aluno");
 
+/**
+ * @description IMPORTAÇÃO DO MODULO DE SERVIÇO DE turma
+ */
+const turmaServices = require("./turma");
+
+/**
+ * @description IMPORTAÇÃO DO MODULO DE SERVIÇO DE receita
+ */
+const receitaServices = require("./receita");
+
 module.exports = {
     planoServices,
     departamentoServices,
@@ -41,4 +51,6 @@ module.exports = {
     usuarioServices,
     funcionarioServices,
     alunoServices,
+    turmaServices,
+    receitaServices,
 };

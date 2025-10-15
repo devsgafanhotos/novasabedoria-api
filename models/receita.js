@@ -11,13 +11,9 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(255),
       allowNull: false
     },
-    mes_correspondente: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    ano_lectivo: {
-      type: DataTypes.STRING(255),
-      allowNull: true
+    data_correspondente: {
+      type: DataTypes.DATE,
+      allowNull: false
     },
     data_cadastro: {
       type: DataTypes.DATE,
@@ -58,17 +54,20 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
+        name: "id_aluno",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "id_aluno" },
+          { name: "tipo_receita" },
+          { name: "data_correspondente" },
+        ]
+      },
+      {
         name: "id_funcionario",
         using: "BTREE",
         fields: [
           { name: "id_funcionario" },
-        ]
-      },
-      {
-        name: "id_aluno",
-        using: "BTREE",
-        fields: [
-          { name: "id_aluno" },
         ]
       },
     ]

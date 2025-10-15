@@ -80,29 +80,30 @@ CREATE TABLE
 CREATE TABLE
     turma (
         id integer (10) PRIMARY KEY auto_increment,
-        nome VARCHAR(255) not null,
-        numero_alunos INTEGER (10) not null,
-        numero_vagas INTEGER (10) not null,
+        nome VARCHAR(255) not null unique,
+        numero_vagas INTEGER (10) not null default 45,
         numero_sala INTEGER (10) not null,
         periodo enum ('Manhã', 'Tarde') not null,
-        ano_lectivo varchar(255),
-        data_cadastro timestamp default current_timestamp,
+        ano_lectivo varchar(255) not null,
+        data_cadastro timestamp default current_timestamp not null,
         id_plano INTEGER (10),
-        foreign key (id_plano) references plano (id)
+        foreign key (id_plano) references plano (id),
+        unique(numero_sala, ano_lectivo)
     );
 
 CREATE TABLE
     receita (
         id INTEGER (10) PRIMARY KEY auto_increment,
         tipo_receita varchar(255) not null,
-        mes_correspondente VARCHAR(255),
-        ano_lectivo VARCHAR(255),
+        data_correspondente DATETIME NOT NULL,
         data_cadastro timestamp default current_timestamp,
         descricao TEXT,
         id_funcionario integer (10),
         id_aluno integer (10),
         foreign key (id_funcionario) references funcionario (id),
-        foreign key (id_aluno) references aluno (id)
+        foreign key (id_aluno) references aluno (id),
+        
+        unique(id_aluno, tipo_receita, data_correspondente)
     );
 
 CREATE TABLE

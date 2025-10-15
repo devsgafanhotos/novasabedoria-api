@@ -33,6 +33,16 @@ const funcionarioControllers = require("./funcionario");
  */
 const alunoControllers = require("./aluno");
 
+/**
+ * @description IMPORTAÇÃO DO CONTROLADOR DE turmaS
+ */
+const turmaControllers = require("./turma");
+
+/**
+ * @description IMPORTAÇÃO DO CONTROLADOR DE receitaS
+ */
+const receitaControllers = require("./receita");
+
 module.exports = {
     planoControllers,
     departamentoControllers,
@@ -41,4 +51,6 @@ module.exports = {
     usuarioControllers,
     funcionarioControllers,
     alunoControllers,
+    turmaControllers,
+    receitaControllers,
 };
